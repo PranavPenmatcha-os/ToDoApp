@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArrowFatLinesUp, ArrowFatLinesDown, Backspace, CheckSquare } from 'phosphor-react';
 
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
@@ -43,27 +44,44 @@ function ToDoList() {
   return (
     <div className="page">
       <div className="to-do-list">
-        <h1>To-Do List</h1>
+        <h1>Tasks</h1>
         <div className="input-container">
           <input
             type="text"
             value={newTask}
             onChange={handleInputChange}
-            placeholder="Enter a task"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                addTask();
+              }
+            }}
+            placeholder="Add a new task"
           />
-          <button onClick={addTask}>Add Task</button>
         </div>
         <ul>
           {tasks.map((task, index) => (
-            <li key={index}>
-              <div className={`task-row ${task.completed ? "completed" : ""}`}>
-                <span>{task.text}</span>
-                <div className="button-group">
-                  <button onClick={() => toggleComplete(index)}>✅</button>
-                  <button onClick={() => moveTaskUp(index)}>⬆️</button>
-                  <button onClick={() => moveTaskDown(index)}>⬇️</button>
-                  <button onClick={() => deleteTask(index)}>🗑️</button>
-                </div>
+            <li key={index} className="task-item">
+              <div className="task-content">
+                <button
+                  className={`check-button ${task.completed ? "checked" : ""}`}
+                  onClick={() => toggleComplete(index)}
+                >
+                  {/* <CheckSquare size={24} weight={task.completed ? "fill" : "regular"} /> */}
+                </button>
+                <span className={`task-text ${task.completed ? "completed" : ""}`}>
+                  {task.text}
+                </span>
+              </div>
+              <div className="button-group">
+                <button onClick={() => moveTaskUp(index)} title="Move Up">
+                  <ArrowFatLinesUp size={24} />
+                </button>
+                <button onClick={() => moveTaskDown(index)} title="Move Down">
+                  <ArrowFatLinesDown size={24} />
+                </button>
+                <button onClick={() => deleteTask(index)} title="Delete">
+                  <Backspace size={24} />
+                </button>
               </div>
             </li>
           ))}
